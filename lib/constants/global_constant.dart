@@ -1,3 +1,3 @@
 class GlobalConstant{
-  static const String kAppName = 'Calisthenics App';
+  static const String kAppName = 'Calisthenic App';
 }
