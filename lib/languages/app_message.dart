@@ -8,9 +8,10 @@ class AppMessage extends Translations {
       };
 
   Map<String, String> get _fr => {
-        'Hello_world': 'Bonjour tous le monde',
+        'hello_world': 'Bonjour tous le monde',
       };
+
   Map<String, String> get _en => {
-        'Hello_world': 'Hello world',
+        'hello_world': 'Hello world',
       };
 }

@@ -1,3 +1,5 @@
+import 'package:calisthenic_app/bindings/app_binding.dart';
+import 'package:calisthenic_app/configs/app_route.dart';
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/global_constant.dart';
 import 'package:calisthenic_app/languages/app_message.dart';
@@ -13,52 +15,19 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     // Remove splash screen after initialization is completed
     FlutterNativeSplash.remove();
-    
+
     return GetMaterialApp(
       title: GlobalConstant.kAppName,
       debugShowCheckedModeBanner: false,
-      translations: AppMessage(),
-      locale: const Locale('en', 'US'),
+      locale: Get.deviceLocale,
       fallbackLocale: const Locale('en', 'US'),
+      translations: AppMessage(),
       themeMode: ThemeService.theme,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
-      // initialBinding: AppBinding(),
-      // initialRoute: AppRoute.initialRoute,
-      // getPages: AppRoute.pages,
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Hello_world'.tr,
-                style: const TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.updateLocale(const Locale('fr', 'FR'));
-                },
-                child: const Text('French'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Get.updateLocale(const Locale('en', 'US'));
-                },
-                child: const Text('English'),
-              ),
-              TextButton(
-                onPressed: () {
-                  ThemeService.switchTheme();
-                },
-                child: const Text('Switch theme'),
-              ),
-            ],
-          ),
-        ),
-      ),
+      initialBinding: AppBinding(),
+      initialRoute: AppRoute.initialRoute,
+      getPages: AppRoute.pages,
     );
   }
 }
