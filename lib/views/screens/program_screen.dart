@@ -28,7 +28,67 @@ class ProgramScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.bottomSheet(
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 8 * LayoutConstant.kScaleFactor,
+                        horizontal: LayoutConstant.kHorizontalScreenPadding),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Download',
+                                style: context.theme.textTheme.labelMedium,
+                              ),
+                              Icon(
+                                Icons.download,
+                                size: context.theme.iconTheme.size,
+                                color: context.theme.iconTheme.color,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: LayoutConstant.kSpaceBetweenElements,
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Save as favorite',
+                                style: context.theme.textTheme.labelMedium,
+                              ),
+                              Icon(
+                                Icons.favorite_border_rounded,
+                                size: context.theme.iconTheme.size,
+                                color: context.theme.iconTheme.color,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  backgroundColor: context.theme.scaffoldBackgroundColor,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(
+                        LayoutConstant.kCardRadius,
+                      ),
+                    ),
+                  ));
+            },
             icon: const Icon(EvaIcons.moreVerticalOutline),
           ),
         ],
