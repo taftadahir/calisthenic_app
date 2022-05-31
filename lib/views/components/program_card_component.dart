@@ -1,4 +1,6 @@
 import 'package:calisthenic_app/constants/layout_constant.dart';
+import 'package:calisthenic_app/constants/route_constant.dart';
+import 'package:calisthenic_app/controllers/program_controller.dart';
 import 'package:calisthenic_app/models/program.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,12 +27,16 @@ class ProgramCardComponent extends StatelessWidget {
         splashColor: context.theme.cardColor,
         focusColor: context.theme.cardColor,
         highlightColor: context.theme.cardColor,
-        onTap: () {},
+        onTap: () {
+          ProgramController programController = Get.find();
+          programController.program = program;
+          Get.toNamed(RouteConstant.kProgramScreen);
+        },
         child: Container(
           constraints: BoxConstraints(
             minHeight: LayoutConstant.kCardHeight,
           ),
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0 * LayoutConstant.kScaleFactor),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

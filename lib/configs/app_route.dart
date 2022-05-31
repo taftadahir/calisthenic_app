@@ -1,5 +1,6 @@
 import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:calisthenic_app/views/screens/home_screen.dart';
+import 'package:calisthenic_app/views/screens/program_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoute {
@@ -7,6 +8,10 @@ class AppRoute {
         GetPage(
           name: RouteConstant.kHomeScreen,
           page: () => const HomeScreen(),
+        ),
+        GetPage(
+          name: RouteConstant.kProgramScreen,
+          page: () => const ProgramScreen(),
         ),
       ];
 

@@ -33,49 +33,53 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        physics: AppTheme.kPhysics,
-        padding: EdgeInsets.only(
-          top: LayoutConstant.kVerticalScreenPadding,
-          left: LayoutConstant.kHorizontalScreenPadding,
-          right: LayoutConstant.kHorizontalScreenPadding,
-        ),
-        children: [
-          Text(
-            'Programs',
-            style: context.theme.textTheme.headlineLarge,
-          ),
-          SizedBox(
-            height: LayoutConstant.kSpaceBetweenTitleAndElement,
-          ),
-          ...ProgramController.programs.map(
-            (program) => Padding(
-              padding: EdgeInsets.only(
-                bottom: LayoutConstant.kSpaceBetweenElements,
-              ),
-              child: ProgramCardComponent(program: program),
+      body: GetBuilder(
+        builder: (ProgramController programController) {
+          return ListView(
+            physics: AppTheme.kPhysics,
+            padding: EdgeInsets.only(
+              top: LayoutConstant.kVerticalScreenPadding,
+              left: LayoutConstant.kHorizontalScreenPadding,
+              right: LayoutConstant.kHorizontalScreenPadding,
             ),
-          ),
-          SizedBox(
-            height: LayoutConstant.kSpaceBetweenGroups -
-                LayoutConstant.kSpaceBetweenElements,
-          ),
-          Text(
-            'Skills',
-            style: context.theme.textTheme.headlineLarge,
-          ),
-          SizedBox(
-            height: LayoutConstant.kSpaceBetweenTitleAndElement,
-          ),
-          ...ProgramController.skills.map(
-            (program) => Padding(
-              padding: EdgeInsets.only(
-                bottom: LayoutConstant.kSpaceBetweenElements,
+            children: [
+              Text(
+                'Programs',
+                style: context.theme.textTheme.headlineLarge,
               ),
-              child: ProgramCardComponent(program: program),
-            ),
-          ),
-        ],
+              SizedBox(
+                height: LayoutConstant.kSpaceBetweenTitleAndElement,
+              ),
+              ...programController.programs.map(
+                (program) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: LayoutConstant.kSpaceBetweenElements,
+                  ),
+                  child: ProgramCardComponent(program: program),
+                ),
+              ),
+              SizedBox(
+                height: LayoutConstant.kSpaceBetweenGroups -
+                    LayoutConstant.kSpaceBetweenElements,
+              ),
+              Text(
+                'Skills',
+                style: context.theme.textTheme.headlineLarge,
+              ),
+              SizedBox(
+                height: LayoutConstant.kSpaceBetweenTitleAndElement,
+              ),
+              ...programController.skills.map(
+                (program) => Padding(
+                  padding: EdgeInsets.only(
+                    bottom: LayoutConstant.kSpaceBetweenElements,
+                  ),
+                  child: ProgramCardComponent(program: program),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
