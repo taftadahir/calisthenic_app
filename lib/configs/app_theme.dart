@@ -6,6 +6,9 @@ class AppTheme {
   // Application physics
   static ScrollPhysics? get kPhysics => const BouncingScrollPhysics();
 
+  // Animation duration
+  static Duration get animationDuration => const Duration(milliseconds: 300);
+
 // Common colors
   static Color successColor = const Color(0xFF4E937A);
   static Color whiteColor = const Color(0xFFFFFFFF);
@@ -59,6 +62,11 @@ class AppTheme {
             fontWeight: FontWeight.w700,
             color: whiteColor,
           ),
+          titleMedium: GoogleFonts.montserrat(
+            fontSize: 16 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w600,
+            color: whiteColor,
+          ),
           labelMedium: GoogleFonts.montserrat(
             fontSize: 16 * LayoutConstant.kScaleFactor,
             fontWeight: FontWeight.w600,
@@ -68,6 +76,12 @@ class AppTheme {
             fontSize: 10 * LayoutConstant.kScaleFactor,
             fontWeight: FontWeight.w500,
             color: whiteColor,
+          ),
+          bodySmall: GoogleFonts.montserrat(
+            fontSize: 12 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w400,
+            color: whiteColor,
+            height: 1.8,
           ),
         ),
         iconTheme: IconThemeData(
@@ -117,6 +131,11 @@ class AppTheme {
             fontWeight: FontWeight.w700,
             color: blackLightColor,
           ),
+          titleMedium: GoogleFonts.montserrat(
+            fontSize: 16 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w600,
+            color: blackLightColor,
+          ),
           labelMedium: GoogleFonts.montserrat(
             fontSize: 16 * LayoutConstant.kScaleFactor,
             fontWeight: FontWeight.w600,
@@ -126,6 +145,12 @@ class AppTheme {
             fontSize: 10 * LayoutConstant.kScaleFactor,
             fontWeight: FontWeight.w500,
             color: blackLightColor,
+          ),
+          bodySmall: GoogleFonts.montserrat(
+            fontSize: 12 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w400,
+            color: blackLightColor,
+            height: 1.8,
           ),
         ),
         iconTheme: IconThemeData(

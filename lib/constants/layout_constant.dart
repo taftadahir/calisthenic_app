@@ -11,4 +11,6 @@ class LayoutConstant {
   static double kHorizontalScreenPadding = 8.0 * kScaleFactor;
   static double kVerticalScreenPadding = 16.0 * kScaleFactor;
   static double kCardHeight = 80 * LayoutConstant.kScaleFactor;
+  static double kInactiveDotSize = 8 * LayoutConstant.kScaleFactor;
+  static double kActiveDotSize = 16 * LayoutConstant.kScaleFactor;
 }

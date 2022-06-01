@@ -1,5 +1,6 @@
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
+import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:calisthenic_app/controllers/program_controller.dart';
 import 'package:calisthenic_app/models/workout.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
@@ -131,14 +132,18 @@ class ProgramScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Pull Up",
+                      controller.program!.name,
                       style: context.theme.textTheme.titleLarge,
                     ),
                     SizedBox(
                       width: LayoutConstant.kSpaceBetweenTitleAndElement,
                     ),
                     IconButton(
-                      onPressed: () {},
+                      onPressed: controller.program == null
+                          ? null
+                          : () {
+                              Get.toNamed(RouteConstant.kProgramDetailScreen);
+                            },
                       icon: const Icon(
                         Icons.help_outline_rounded,
                         size: 32.0,
