@@ -26,11 +26,34 @@ class AppTheme {
   static Color backgroundDarkColor = const Color.fromRGBO(48, 52, 63, 1);
   static Color backgroundCardDarkColor = const Color.fromRGBO(52, 57, 71, 1);
 
+// Elevated button theme
+
+  static final ElevatedButtonThemeData elevatedButtonTheme =
+      ElevatedButtonThemeData(
+    style: ButtonStyle(
+      shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(32),
+        ),
+      ),
+      fixedSize: MaterialStateProperty.all(
+        Size(double.infinity, 40 * LayoutConstant.kScaleFactor),
+      ),
+      animationDuration: AppTheme.animationDuration,
+      backgroundColor: MaterialStateProperty.all(primaryColor),
+      elevation: MaterialStateProperty.all(0.0),
+      padding: MaterialStateProperty.all(
+        const EdgeInsets.symmetric(horizontal: 24),
+      ),
+    ),
+  );
+
   static ThemeData get dark => ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: backgroundDarkColor,
         cardColor: backgroundCardDarkColor,
         canvasColor: greyColor,
+        elevatedButtonTheme: elevatedButtonTheme,
         textTheme: TextTheme(
           displayLarge: GoogleFonts.montserrat(
             fontSize: 20 * LayoutConstant.kScaleFactor,
@@ -83,6 +106,11 @@ class AppTheme {
             color: whiteColor,
             height: 1.8,
           ),
+          bodyLarge: GoogleFonts.montserrat(
+            fontSize: 40 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w700,
+            color: primaryColor,
+          ),
         ),
         iconTheme: IconThemeData(
           color: whiteColor,
@@ -100,6 +128,7 @@ class AppTheme {
         scaffoldBackgroundColor: backgroundLightColor,
         cardColor: backgroundCardLightColor,
         canvasColor: greyColor,
+        elevatedButtonTheme: elevatedButtonTheme,
         textTheme: TextTheme(
           displayLarge: GoogleFonts.montserrat(
             fontSize: 20 * LayoutConstant.kScaleFactor,
@@ -145,6 +174,11 @@ class AppTheme {
             fontSize: 10 * LayoutConstant.kScaleFactor,
             fontWeight: FontWeight.w500,
             color: blackLightColor,
+          ),
+          bodyLarge: GoogleFonts.montserrat(
+            fontSize: 40 * LayoutConstant.kScaleFactor,
+            fontWeight: FontWeight.w700,
+            color: primaryColor,
           ),
           bodySmall: GoogleFonts.montserrat(
             fontSize: 12 * LayoutConstant.kScaleFactor,

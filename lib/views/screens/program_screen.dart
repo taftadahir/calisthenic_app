@@ -1,7 +1,9 @@
+import 'package:calisthenic_app/configs/app_route.dart';
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/timer_controller.dart';
 import 'package:calisthenic_app/models/workout.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:calisthenic_app/views/components/day_component.dart';
@@ -31,64 +33,67 @@ class ProgramScreen extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.bottomSheet(
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 8 * LayoutConstant.kScaleFactor,
-                        horizontal: LayoutConstant.kHorizontalScreenPadding),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Download',
-                                style: context.theme.textTheme.labelMedium,
-                              ),
-                              Icon(
-                                Icons.download,
-                                size: context.theme.iconTheme.size,
-                                color: context.theme.iconTheme.color,
-                              ),
-                            ],
-                          ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: 8 * LayoutConstant.kScaleFactor,
+                      horizontal: LayoutConstant.kHorizontalScreenPadding),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Download',
+                              style: context.theme.textTheme.labelMedium,
+                            ),
+                            Icon(
+                              Icons.download,
+                              size: context.theme.iconTheme.size,
+                              color: context.theme.iconTheme.color,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: LayoutConstant.kSpaceBetweenElements,
+                      ),
+                      SizedBox(
+                        height: LayoutConstant.kSpaceBetweenElements,
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Save as favorite',
+                              style: context.theme.textTheme.labelMedium,
+                            ),
+                            Icon(
+                              Icons.favorite_border_rounded,
+                              size: context.theme.iconTheme.size,
+                              color: context.theme.iconTheme.color,
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: () {},
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Save as favorite',
-                                style: context.theme.textTheme.labelMedium,
-                              ),
-                              Icon(
-                                Icons.favorite_border_rounded,
-                                size: context.theme.iconTheme.size,
-                                color: context.theme.iconTheme.color,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+                backgroundColor: context.theme.scaffoldBackgroundColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(
+                      LayoutConstant.kCardRadius,
                     ),
                   ),
-                  backgroundColor: context.theme.scaffoldBackgroundColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(
-                        LayoutConstant.kCardRadius,
-                      ),
-                    ),
-                  ));
+                ),
+                enterBottomSheetDuration: AppTheme.animationDuration,
+                exitBottomSheetDuration: AppTheme.animationDuration,
+              );
             },
             icon: const Icon(EvaIcons.moreVerticalOutline),
           ),
@@ -105,12 +110,19 @@ class ProgramScreen extends StatelessWidget {
           ),
         ),
         child: FloatingActionButton.extended(
-          onPressed: () {},
+          onPressed: () {
+            TimerController controller = Get.find();
+            controller.count = 300;
+            controller.initialCount = 300;
+            controller.pauseCount = 0;
+            controller.start();
+            Get.toNamed(RouteConstant.kRestScreen);
+          },
           label: Text(
             'Start',
             style: GoogleFonts.montserrat(
               fontSize: 16 * LayoutConstant.kScaleFactor,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
               color: const Color(0xffffffff),
             ),
           ),

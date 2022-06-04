@@ -13,4 +13,6 @@ class LayoutConstant {
   static double kCardHeight = 80 * LayoutConstant.kScaleFactor;
   static double kInactiveDotSize = 8 * LayoutConstant.kScaleFactor;
   static double kActiveDotSize = 16 * LayoutConstant.kScaleFactor;
+  static double kCircularTimerRadius =
+      (Get.width - 2 * kHorizontalScreenPadding) * 2 / 5;
 }
