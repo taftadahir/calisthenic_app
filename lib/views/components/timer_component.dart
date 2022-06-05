@@ -2,7 +2,6 @@ import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/controllers/timer_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:get/get.dart';
 

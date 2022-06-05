@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
+import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:calisthenic_app/controllers/timer_controller.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:calisthenic_app/views/components/button_component.dart';
@@ -121,10 +122,25 @@ class RestScreen extends StatelessWidget {
               // Next workout
               Column(
                 children: [
-                  Text(
-                    'Push Up',
-                    textAlign: TextAlign.center,
-                    style: context.theme.textTheme.titleLarge,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Push Up',
+                        textAlign: TextAlign.center,
+                        style: context.theme.textTheme.titleLarge,
+                      ),
+                      SizedBox(
+                        width: LayoutConstant.kSpaceBetweenTitleAndElement,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.help_outline_rounded,
+                          size: 32.0,
+                        ),
+                      ),
+                    ],
                   ),
                   SizedBox(
                     height: 16 * LayoutConstant.kScaleFactor,
@@ -165,7 +181,11 @@ class RestScreen extends StatelessWidget {
                     onPressed: () {
                       TimerController controller = Get.find();
                       controller.reset();
-                      Get.back();
+                      controller.count = 10;
+                      controller.initialCount = 10;
+                      controller.pauseCount = 0;
+                      controller.start();
+                      Get.toNamed(RouteConstant.kWorkoutOnScreen);
                     },
                     text: 'Skip',
                   ),

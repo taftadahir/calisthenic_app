@@ -1,4 +1,3 @@
-import 'package:calisthenic_app/configs/app_route.dart';
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/constants/route_constant.dart';
@@ -112,8 +111,8 @@ class ProgramScreen extends StatelessWidget {
         child: FloatingActionButton.extended(
           onPressed: () {
             TimerController controller = Get.find();
-            controller.count = 300;
-            controller.initialCount = 300;
+            controller.count = 10;
+            controller.initialCount = 10;
             controller.pauseCount = 0;
             controller.start();
             Get.toNamed(RouteConstant.kRestScreen);

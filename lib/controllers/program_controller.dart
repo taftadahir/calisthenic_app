@@ -11,6 +11,7 @@ class ProgramController extends GetxController {
   int _activeDay = -1;
   int? _activeProgramImage;
   List<dynamic>? programImages;
+  Workout? _workout;
 
   String? images =
       '{"images":["front_lever.png", "front_lever.png", "front_lever.png", "front_lever.png"]}';
@@ -133,6 +134,12 @@ class ProgramController extends GetxController {
   int get activeDay => _activeDay;
   set activeDay(int day) {
     _activeDay = day;
+    update();
+  }
+
+  Workout? get workout => _workout;
+  set workout(Workout? workout) {
+    _workout = workout;
     update();
   }
 
