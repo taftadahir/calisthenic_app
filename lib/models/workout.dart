@@ -9,6 +9,7 @@ class Workout {
   final Program program;
   final Workout? prev;
   final bool completed;
+  final bool skipped;
 
   Workout({
     required this.id,
@@ -17,6 +18,7 @@ class Workout {
     required this.exercise,
     required this.program,
     this.prev,
+    this.skipped = false,
 
     // completed: calculated depending on sets stats
     this.completed = false,

@@ -13,7 +13,7 @@ class WorkoutCardComponent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double checkSize = 48;
+    double checkSize = 24 * LayoutConstant.kScaleFactor;
     double spaceBetweenWorkoutDetail = 24;
     return Card(
       color: context.theme.cardColor,
@@ -86,27 +86,20 @@ class WorkoutCardComponent extends StatelessWidget {
                 width: 8 * LayoutConstant.kScaleFactor,
               ),
               workout.completed
-                  ? Container(
-                      height: checkSize,
-                      width: checkSize,
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(48),
-                        border: Border.all(
-                          width: 2.0,
-                          color: AppTheme.successColor,
-                        ),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.done,
-                          color: AppTheme.successColor,
-                        ),
-                      ),
+                  ? Icon(
+                      Icons.task_alt_rounded,
+                      color: AppTheme.successColor,
+                      size: checkSize,
                     )
-                  : const SizedBox(
-                      width: 0,
-                    ),
+                  : (workout.skipped
+                      ? Icon(
+                          Icons.adjust_rounded,
+                          color: AppTheme.greyColor,
+                          size: 24 * LayoutConstant.kScaleFactor,
+                        )
+                      : const SizedBox(
+                          width: 0,
+                        )),
             ],
           ),
         ),

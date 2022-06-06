@@ -164,6 +164,7 @@ class ProgramController extends GetxController {
                 day: nextDay,
                 workoutType: workoutType,
                 completed: workoutType == WorkoutType.warmUp ? true : false,
+                skipped: workoutType == WorkoutType.workout ? true : false,
                 exercise: Exercise(
                   id: 1,
                   name: 'Pull Up',

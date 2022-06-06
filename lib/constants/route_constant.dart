@@ -4,4 +4,5 @@ class RouteConstant {
   static const String kProgramDetailScreen = '/program_detail';
   static const String kRestScreen = '/rest';
   static const String kWorkoutOnScreen = '/workout_on';
+  static const String kResultScreen = '/result';
 }

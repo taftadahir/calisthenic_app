@@ -3,6 +3,7 @@ import 'package:calisthenic_app/views/screens/home_screen.dart';
 import 'package:calisthenic_app/views/screens/program_detail_screen.dart';
 import 'package:calisthenic_app/views/screens/program_screen.dart';
 import 'package:calisthenic_app/views/screens/rest_screen.dart';
+import 'package:calisthenic_app/views/screens/result_screen.dart';
 import 'package:calisthenic_app/views/screens/workout_on_screen.dart';
 import 'package:get/get.dart';
 
@@ -27,6 +28,10 @@ class AppRoute {
         GetPage(
           name: RouteConstant.kWorkoutOnScreen,
           page: () => const WorkoutOnScreen(),
+        ),
+        GetPage(
+          name: RouteConstant.kResultScreen,
+          page: () => const ResultScreen(),
         ),
       ];
 

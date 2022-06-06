@@ -1,5 +1,6 @@
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
+import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:calisthenic_app/controllers/timer_controller.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:calisthenic_app/views/components/button_component.dart';
@@ -84,6 +85,7 @@ class WorkoutOnScreen extends StatelessWidget {
                 onPressed: () {
                   TimerController timerController = Get.find();
                   timerController.reset();
+                  Get.toNamed(RouteConstant.kResultScreen);
                 },
                 text: 'Done',
               ),
