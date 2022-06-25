@@ -1,5 +1,5 @@
 import 'package:calisthenic_app/configs/app_theme.dart';
-import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +20,7 @@ class DayComponent extends StatelessWidget {
     double size = 48.0;
     return GestureDetector(
       onTap: () {
-        ProgramController programController = Get.find();
+        AppController programController = Get.find();
         programController.activeDay = day;
       },
       child: Container(

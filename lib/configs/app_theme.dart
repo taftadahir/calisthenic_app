@@ -9,25 +9,24 @@ class AppTheme {
   // Animation duration
   static Duration get animationDuration => const Duration(milliseconds: 300);
 
-// Common colors
+  // Common colors
   static Color successColor = const Color(0xFF4E937A);
   static Color whiteColor = const Color(0xFFFFFFFF);
   static Color primaryColor = const Color.fromRGBO(111, 123, 247, 1);
   static Color errorColor = const Color.fromRGBO(255, 84, 108, 1);
   static Color greyColor = const Color.fromRGBO(141, 153, 174, 1);
 
-// Light colors specific
+  // Light colors specific
   static Color backgroundLightColor = const Color.fromRGBO(245, 246, 250, 1);
   static Color backgroundCardLightColor =
       const Color.fromRGBO(240, 241, 245, 1);
   static Color blackLightColor = const Color.fromRGBO(48, 52, 63, 1);
 
-// Dark colors specific
+  // Dark colors specific
   static Color backgroundDarkColor = const Color.fromRGBO(48, 52, 63, 1);
   static Color backgroundCardDarkColor = const Color.fromRGBO(52, 57, 71, 1);
 
-// Elevated button theme
-
+  // Elevated button theme
   static final ElevatedButtonThemeData elevatedButtonTheme =
       ElevatedButtonThemeData(
     style: ButtonStyle(
@@ -48,6 +47,7 @@ class AppTheme {
     ),
   );
 
+  // TODO: Theme definitions
   static ThemeData get dark => ThemeData(
         primaryColor: primaryColor,
         scaffoldBackgroundColor: backgroundDarkColor,

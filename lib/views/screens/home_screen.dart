@@ -1,6 +1,6 @@
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
-import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:calisthenic_app/services/theme_service.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:calisthenic_app/views/components/program_card_component.dart';
@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBarComponent.getAppBarComponent(
         leading: IconButton(
           onPressed: () {},
-          icon: const Icon(EvaIcons.menu),
+          icon: const Icon(EvaIcons.smilingFace),
         ),
         actions: [
           IconButton(
@@ -33,8 +33,8 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: GetBuilder(
-        builder: (ProgramController programController) {
+      body: GetBuilder<AppController>(
+        builder: (appController) {
           return ListView(
             physics: AppTheme.kPhysics,
             padding: EdgeInsets.only(
@@ -50,14 +50,16 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: LayoutConstant.kSpaceBetweenTitleAndElement,
               ),
-              ...programController.programs.map(
-                (program) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: LayoutConstant.kSpaceBetweenElements,
+              ...appController.programs
+                  .where((program) => !program.isSkill)
+                  .map(
+                    (program) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: LayoutConstant.kSpaceBetweenElements,
+                      ),
+                      child: ProgramCardComponent(program: program),
+                    ),
                   ),
-                  child: ProgramCardComponent(program: program),
-                ),
-              ),
               SizedBox(
                 height: LayoutConstant.kSpaceBetweenGroups -
                     LayoutConstant.kSpaceBetweenElements,
@@ -69,14 +71,14 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: LayoutConstant.kSpaceBetweenTitleAndElement,
               ),
-              ...programController.skills.map(
-                (program) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: LayoutConstant.kSpaceBetweenElements,
+              ...appController.programs.where((program) => program.isSkill).map(
+                    (program) => Padding(
+                      padding: EdgeInsets.only(
+                        bottom: LayoutConstant.kSpaceBetweenElements,
+                      ),
+                      child: ProgramCardComponent(program: program),
+                    ),
                   ),
-                  child: ProgramCardComponent(program: program),
-                ),
-              ),
             ],
           );
         },

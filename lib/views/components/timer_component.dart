@@ -7,22 +7,24 @@ import 'package:get/get.dart';
 
 class TimerComponent extends StatelessWidget {
   final String? title;
+  final bool forReps;
   const TimerComponent({
     Key? key,
     this.title,
+    this.forReps = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(builder: (TimerController controller) {
-      int min = controller.count ~/ 60;
-      int sec = controller.count % 60;
+    return GetBuilder(builder: (TimerController timerController) {
+      int min = timerController.count ~/ 60;
+      int sec = timerController.count % 60;
       String time =
           (min < 10 ? '0$min : ' : '$min : ') + (sec < 10 ? '0$sec' : '$sec');
 
       List<Widget> widgets = [
         Text(
-          time,
+          forReps ? timerController.initialCount.toString() : time,
           style: context.theme.textTheme.bodyLarge,
         ),
       ];
@@ -41,8 +43,10 @@ class TimerComponent extends StatelessWidget {
       return CircularPercentIndicator(
         radius: LayoutConstant.kCircularTimerRadius,
         lineWidth: 8,
-        percent: (controller.initialCount - controller.count) /
-            controller.initialCount,
+        percent: forReps
+            ? 1
+            : (timerController.initialCount - timerController.count) /
+                timerController.initialCount,
         progressColor: context.theme.primaryColor,
         backgroundColor: context.theme.canvasColor,
         circularStrokeCap: CircularStrokeCap.round,

@@ -8,6 +8,7 @@ import 'package:calisthenic_app/views/screens/workout_on_screen.dart';
 import 'package:get/get.dart';
 
 class AppRoute {
+  // TODO: App route
   static List<GetPage<dynamic>> get pages => [
         GetPage(
           name: RouteConstant.kHomeScreen,
@@ -35,5 +36,6 @@ class AppRoute {
         ),
       ];
 
+  // TODO: Initial app route
   static String get initialRoute => RouteConstant.kHomeScreen;
 }

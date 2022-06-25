@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 
+// TODO: Layout constant
 class LayoutConstant {
   static const double kMinScreenWidth = 320.0;
   static double kScaleFactor = Get.width / kMinScreenWidth;

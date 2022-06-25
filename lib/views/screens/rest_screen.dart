@@ -3,11 +3,14 @@ import 'dart:async';
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/constants/route_constant.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:calisthenic_app/controllers/timer_controller.dart';
+import 'package:calisthenic_app/database/app_database.dart';
+import 'package:calisthenic_app/models/exercise.dart';
+import 'package:calisthenic_app/models/workout.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:calisthenic_app/views/components/button_component.dart';
 import 'package:calisthenic_app/views/components/timer_component.dart';
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,13 +19,31 @@ class RestScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppController appController = Get.find();
+
+    // Getting the workout
+    Workout workout = appController.workouts
+        .where(
+          (workout) => workout.sysId == appController.activeWorkoutSysId,
+        )
+        .first;
+
+    // Getting the next exercise workout
+    Future<Exercise?> exercise =
+        AppDatabase.instance.readExercise(workout.exerciseSysId);
+
+    // TimerController timerController = Get.find();
+    // if (timerController.count <= 0) {
+    //   Get.toNamed(RouteConstant.kResultScreen);
+    // }
+
     return Scaffold(
       appBar: AppBarComponent.getAppBarComponent(
         leading: IconButton(
           onPressed: () {
             TimerController timerController = Get.find();
-            timerController.pause();
-            timerController.startPause();
+            timerController.cancelTimer();
+            timerController.startPauseTimer();
             Get.dialog(
               Dialog(
                 insetPadding: EdgeInsets.symmetric(
@@ -73,6 +94,8 @@ class RestScreen extends StatelessWidget {
                           ),
                           ButtonComponent(
                             onPressed: () {
+                              AppController appController = Get.find();
+                              appController.updateWorkouts();
                               Get.back();
                               Get.back();
                             },
@@ -99,7 +122,10 @@ class RestScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(EvaIcons.moreVerticalOutline),
+            icon: const Icon(
+              Icons.help_outline_rounded,
+              size: 32.0,
+            ),
           ),
         ],
       ),
@@ -122,26 +148,36 @@ class RestScreen extends StatelessWidget {
               // Next workout
               Column(
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Push Up',
-                        textAlign: TextAlign.center,
-                        style: context.theme.textTheme.titleLarge,
-                      ),
-                      SizedBox(
-                        width: LayoutConstant.kSpaceBetweenTitleAndElement,
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.help_outline_rounded,
-                          size: 32.0,
-                        ),
-                      ),
-                    ],
-                  ),
+                  FutureBuilder(
+                      future: exercise,
+                      builder: (context, snapshot) {
+                        return snapshot.connectionState == ConnectionState.done
+                            ? (snapshot.hasData
+                                ? Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: LayoutConstant
+                                          .kHorizontalScreenPadding,
+                                    ),
+                                    child: Text(
+                                      (snapshot.data as Exercise).name,
+                                      textAlign: TextAlign.center,
+                                      style: context.theme.textTheme.titleLarge,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.all(
+                                        16.0 * LayoutConstant.kScaleFactor),
+                                    child: Text(
+                                      'Unknown exercise',
+                                      style:
+                                          context.theme.textTheme.displayMedium,
+                                    ),
+                                  ))
+                            : Text(
+                                'In Progress...',
+                                style: context.theme.textTheme.displayMedium,
+                              );
+                      }),
                   SizedBox(
                     height: 16 * LayoutConstant.kScaleFactor,
                   ),
@@ -179,15 +215,27 @@ class RestScreen extends StatelessWidget {
                   ),
                   ButtonComponent(
                     onPressed: () {
-                      TimerController controller = Get.find();
-                      controller.reset();
-                      controller.count = 10;
-                      controller.initialCount = 10;
-                      controller.pauseCount = 0;
-                      controller.start();
-                      Get.toNamed(RouteConstant.kWorkoutOnScreen);
+                      TimerController timerController = Get.find();
+
+                      // TODO: Stop previous timer and start the next one using the next workout time field
+                      timerController.cancelTimer();
+                      timerController.count = workout.time != null
+                          ? workout.time!
+                          : (workout.reps != null ? workout.reps! : 0);
+                      timerController.initialCount = workout.time != null
+                          ? workout.time!
+                          : (workout.reps != null ? workout.reps! : 0);
+                      timerController.pauseCount = 0;
+                      timerController.startTimer();
+
+                      // Update the images and image index using the exercise of that workout
+                      // exercise.then((exercise) {
+
+                      // });
+
+                      Get.offNamed(RouteConstant.kWorkoutOnScreen);
                     },
-                    text: 'Skip',
+                    text: 'Next',
                   ),
                 ],
               ),
@@ -200,7 +248,7 @@ class RestScreen extends StatelessWidget {
 
   void onPopUpDismiss() {
     TimerController timerController = Get.find();
-    timerController.pauseForPause();
-    timerController.start();
+    timerController.cancelPauseTimer();
+    timerController.startTimer();
   }
 }

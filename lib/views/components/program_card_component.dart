@@ -1,6 +1,6 @@
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/constants/route_constant.dart';
-import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:calisthenic_app/models/program.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,9 +27,10 @@ class ProgramCardComponent extends StatelessWidget {
         splashColor: context.theme.cardColor,
         focusColor: context.theme.cardColor,
         highlightColor: context.theme.cardColor,
-        onTap: () {
-          ProgramController programController = Get.find();
-          programController.program = program;
+        onTap: () async {
+          AppController appController = Get.find();
+          appController.program = program;
+          await appController.updateWorkouts();
           Get.toNamed(RouteConstant.kProgramScreen);
         },
         child: Container(
@@ -73,5 +74,6 @@ class ProgramCardComponent extends StatelessWidget {
   }
 
   // Return 0 -> 1
-  double programPercent({required Program program}) => 0.5;
+  double programPercent({required Program program}) =>
+      program.lastCompletedDay / program.days;
 }

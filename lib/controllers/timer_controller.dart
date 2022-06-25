@@ -1,58 +1,80 @@
 import 'dart:async';
 
-import 'package:calisthenic_app/constants/route_constant.dart';
 import 'package:get/get.dart';
 
 class TimerController extends GetxController {
+  // TODO: Timer count
   int _count = 0;
-  int initialCount = -1;
-  int _pauseCount = 0;
-  late Timer _timer;
-  late Timer _pauseTimer;
 
-  void start() {
+  // TODO: This is the initial count used to calculate the percent of the timer
+  int initialCount = 0;
+
+  // TODO: Used when the workout on screen get pause some how
+  int _pauseCount = 0;
+
+  // TODO: Here are the timers used
+  Timer? _timer;
+  Timer? _pauseTimer;
+
+  // TODO: Used to start the timer
+  void startTimer() {
     _count -= _pauseCount;
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_count > 0) {
         _count--;
       } else {
         _count = 0;
-        _timer.cancel();
+        cancelTimer();
       }
       update();
     });
   }
 
-  void startPause() {
+  // Start pause timer
+  void startPauseTimer() {
     _pauseCount = 0;
     _pauseTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       _pauseCount++;
     });
   }
 
-  void pauseForPause() {
-    _pauseTimer.cancel();
+  // Cancel Pause timer
+  void cancelPauseTimer() {
+    if (_pauseTimer != null) {
+      _pauseTimer!.cancel();
+    }
   }
 
-  void pause() {
-    _timer.cancel();
+  // Cancel timer
+  void cancelTimer() {
+    if (_timer != null) {
+      _timer!.cancel();
+    }
+
+    // Cancel the count
+    _count = 0;
+
+    // Re-initialize the pause count for next use
     _pauseCount = 0;
   }
 
+  // count getter and setter
   int get count => _count;
   set count(int count) {
     _count = count;
     update();
   }
 
+  // pause count getter and setter
   int get pauseCount => _pauseCount;
-  set pauseCount(int countpauseCount) {
-    _pauseCount = countpauseCount;
+  set pauseCount(int pauseCount) {
+    _pauseCount = pauseCount;
     update();
   }
 
-  void reset() {
-    _timer.cancel();
-    _count = 0;
-  }
+  // Used to reset the count
+  // void reset() {
+  //   _timer.cancel();
+  //   _count = 0;
+  // }
 }

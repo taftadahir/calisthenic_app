@@ -1,7 +1,7 @@
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
 import 'package:calisthenic_app/constants/route_constant.dart';
-import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:calisthenic_app/controllers/timer_controller.dart';
 import 'package:calisthenic_app/models/workout.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
@@ -31,70 +31,15 @@ class ProgramScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              Get.bottomSheet(
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 8 * LayoutConstant.kScaleFactor,
-                      horizontal: LayoutConstant.kHorizontalScreenPadding),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Download',
-                              style: context.theme.textTheme.labelMedium,
-                            ),
-                            Icon(
-                              Icons.download,
-                              size: context.theme.iconTheme.size,
-                              color: context.theme.iconTheme.color,
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: LayoutConstant.kSpaceBetweenElements,
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Save as favorite',
-                              style: context.theme.textTheme.labelMedium,
-                            ),
-                            Icon(
-                              Icons.favorite_border_rounded,
-                              size: context.theme.iconTheme.size,
-                              color: context.theme.iconTheme.color,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                backgroundColor: context.theme.scaffoldBackgroundColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(
-                      LayoutConstant.kCardRadius,
-                    ),
-                  ),
-                ),
-                enterBottomSheetDuration: AppTheme.animationDuration,
-                exitBottomSheetDuration: AppTheme.animationDuration,
-              );
+              AppController appController = Get.find();
+              if (appController.program != null) {
+                Get.toNamed(RouteConstant.kProgramDetailScreen);
+              }
             },
-            icon: const Icon(EvaIcons.moreVerticalOutline),
+            icon: const Icon(
+              Icons.help_outline_rounded,
+              size: 32.0,
+            ),
           ),
         ],
       ),
@@ -108,29 +53,74 @@ class ProgramScreen extends StatelessWidget {
             backgroundColor: context.theme.primaryColor,
           ),
         ),
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            TimerController controller = Get.find();
-            controller.count = 10;
-            controller.initialCount = 10;
-            controller.pauseCount = 0;
-            controller.start();
-            Get.toNamed(RouteConstant.kRestScreen);
-          },
-          label: Text(
-            'Start',
-            style: GoogleFonts.montserrat(
-              fontSize: 16 * LayoutConstant.kScaleFactor,
-              fontWeight: FontWeight.w500,
-              color: const Color(0xffffffff),
+        child: GetBuilder<AppController>(builder: (appController) {
+          return FloatingActionButton.extended(
+            onPressed: () {
+              // Update the workouts to contains the only workouts from the active day
+              appController.workouts = appController.workouts
+                  .where((workout) => workout.day == appController.activeDay)
+                  .toList();
+
+              if (appController.workouts
+                  .where((workout) => workout.prevWorkoutSysId == null)
+                  .isNotEmpty) {
+                // Update the active workout sysId
+                appController.activeWorkoutSysId = appController.workouts
+                    .where((workout) => workout.prevWorkoutSysId == null)
+                    .first
+                    .sysId;
+
+                // TODO: Configure the timers and counts for first program entry
+                // Time before starting the workout
+                TimerController timerController = Get.find();
+                timerController.count = 10;
+                timerController.initialCount = 10;
+                timerController.pauseCount = 0;
+                timerController.startTimer();
+
+                // TODO: Should go to the rest screen for the first time with a fixed time not depending on programs
+                Get.toNamed(RouteConstant.kRestScreen);
+              } else {
+                // There is no workout that has 'null' in its previous property
+                // Show a snackbar and don't go anywhere
+
+                Get.showSnackbar(
+                  GetSnackBar(
+                    animationDuration: AppTheme.animationDuration,
+                    duration: const Duration(seconds: 5),
+                    backgroundColor:
+                        context.theme.snackBarTheme.backgroundColor ??
+                            context.theme.cardColor,
+                    isDismissible: true,
+                    messageText: Text(
+                      'No workout',
+                      style: context.theme.textTheme.bodySmall,
+                    ),
+                    // title: 'Information',
+                    borderRadius: LayoutConstant.kCardRadius,
+                    snackPosition: SnackPosition.TOP,
+                  ),
+                );
+              }
+            },
+            label: Text(
+              appController.activeDay > appController.nextDay
+                  ? 'Start'
+                  : 'Redo',
+              style: GoogleFonts.montserrat(
+                fontSize: 16 * LayoutConstant.kScaleFactor,
+                fontWeight: FontWeight.w500,
+                color: const Color(0xffffffff),
+              ),
             ),
-          ),
-        ),
+          );
+        }),
       ),
-      body: GetBuilder(builder: (ProgramController controller) {
+      body: GetBuilder(builder: (AppController appController) {
         return Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Column(
               mainAxisSize: MainAxisSize.max,
@@ -139,28 +129,15 @@ class ProgramScreen extends StatelessWidget {
                 SizedBox(
                   height: LayoutConstant.kVerticalScreenPadding,
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      controller.program!.name,
-                      style: context.theme.textTheme.titleLarge,
-                    ),
-                    SizedBox(
-                      width: LayoutConstant.kSpaceBetweenTitleAndElement,
-                    ),
-                    IconButton(
-                      onPressed: controller.program == null
-                          ? null
-                          : () {
-                              Get.toNamed(RouteConstant.kProgramDetailScreen);
-                            },
-                      icon: const Icon(
-                        Icons.help_outline_rounded,
-                        size: 32.0,
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: LayoutConstant.kHorizontalScreenPadding,
+                  ),
+                  child: Text(
+                    appController.program!.name,
+                    style: context.theme.textTheme.titleLarge,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 SizedBox(
                   height: LayoutConstant.kSpaceBetweenTitleAndElement,
@@ -176,18 +153,20 @@ class ProgramScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ...List.generate(
-                        controller.program?.days ?? 0,
+                        appController.program?.days ?? 0,
                         (index) => Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
                           ),
                           child: DayComponent(
                             day: index + 1,
-                            active: index + 1 == controller.activeDay
+                            active: index + 1 == appController.activeDay
                                 ? true
                                 : false,
                             completed:
-                                index + 1 < controller.nextDay ? true : false,
+                                index < appController.program!.lastCompletedDay
+                                    ? true
+                                    : false,
                           ),
                         ),
                       ),
@@ -200,90 +179,90 @@ class ProgramScreen extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: ListView(
+              child: SingleChildScrollView(
                 physics: AppTheme.kPhysics,
                 padding: EdgeInsets.only(
-                  // top: LayoutConstant.kVerticalScreenPadding,
                   left: LayoutConstant.kHorizontalScreenPadding,
                   right: LayoutConstant.kHorizontalScreenPadding,
                 ),
-                children: [
-                  SizedBox(
-                    height: 24 * LayoutConstant.kScaleFactor,
-                  ),
-                  Text(
-                    'Warm Up',
-                    style: context.theme.textTheme.headlineMedium,
-                  ),
-                  SizedBox(
-                    height: LayoutConstant.kSpaceBetweenTitleAndElement,
-                  ),
-                  ...controller
-                      .workouts(
-                        program: controller.program,
-                        workoutType: WorkoutType.warmUp,
-                      )
-                      .map(
-                        (workout) => Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4 * LayoutConstant.kScaleFactor,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 24 * LayoutConstant.kScaleFactor,
+                    ),
+                    Text(
+                      'Warm Up',
+                      style: context.theme.textTheme.headlineMedium,
+                    ),
+                    SizedBox(
+                      height: LayoutConstant.kSpaceBetweenTitleAndElement,
+                    ),
+                    ...appController.workouts
+                        .where((workout) =>
+                            workout.workoutType == WorkoutType.warmUp &&
+                            workout.day == appController.activeDay)
+                        .map(
+                          (workout) => Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4 * LayoutConstant.kScaleFactor,
+                            ),
+                            child: WorkoutCardComponent(workout: workout),
                           ),
-                          child: WorkoutCardComponent(workout: workout),
-                        ),
-                      )
-                      .toList(),
-                  SizedBox(
-                    height: 2 * LayoutConstant.kSpaceBetweenTitleAndElement,
-                  ),
-                  Text(
-                    'Workouts',
-                    style: context.theme.textTheme.headlineMedium,
-                  ),
-                  SizedBox(
-                    height: LayoutConstant.kSpaceBetweenTitleAndElement,
-                  ),
-                  ...controller
-                      .workouts(
-                        program: controller.program,
-                        workoutType: WorkoutType.workout,
-                      )
-                      .map(
-                        (workout) => Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4 * LayoutConstant.kScaleFactor,
+                        )
+                        .toList(),
+                    SizedBox(
+                      height: 2 * LayoutConstant.kSpaceBetweenTitleAndElement,
+                    ),
+                    Text(
+                      'Workouts',
+                      style: context.theme.textTheme.headlineMedium,
+                    ),
+                    SizedBox(
+                      height: LayoutConstant.kSpaceBetweenTitleAndElement,
+                    ),
+                    ...appController.workouts
+                        .where((workout) =>
+                            workout.workoutType == WorkoutType.workout &&
+                            workout.day == appController.activeDay)
+                        .map(
+                          (workout) => Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4 * LayoutConstant.kScaleFactor,
+                            ),
+                            child: WorkoutCardComponent(workout: workout),
                           ),
-                          child: WorkoutCardComponent(workout: workout),
-                        ),
-                      )
-                      .toList(),
-                  SizedBox(
-                    height: 2 * LayoutConstant.kSpaceBetweenTitleAndElement,
-                  ),
-                  Text(
-                    'Cool Down',
-                    style: context.theme.textTheme.headlineMedium,
-                  ),
-                  SizedBox(
-                    height: LayoutConstant.kSpaceBetweenTitleAndElement,
-                  ),
-                  ...controller
-                      .workouts(
-                        program: controller.program,
-                        workoutType: WorkoutType.coolDown,
-                      )
-                      .map(
-                        (workout) => Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4 * LayoutConstant.kScaleFactor,
+                        )
+                        .toList(),
+                    SizedBox(
+                      height: 2 * LayoutConstant.kSpaceBetweenTitleAndElement,
+                    ),
+                    Text(
+                      'Cool Down',
+                      style: context.theme.textTheme.headlineMedium,
+                    ),
+                    SizedBox(
+                      height: LayoutConstant.kSpaceBetweenTitleAndElement,
+                    ),
+                    ...appController.workouts
+                        .where((workout) =>
+                            workout.workoutType == WorkoutType.coolDown &&
+                            workout.day == appController.activeDay)
+                        .map(
+                          (workout) => Padding(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4 * LayoutConstant.kScaleFactor,
+                            ),
+                            child: WorkoutCardComponent(workout: workout),
                           ),
-                          child: WorkoutCardComponent(workout: workout),
-                        ),
-                      )
-                      .toList(),
-                  SizedBox(
-                    height: 24 * LayoutConstant.kScaleFactor,
-                  ),
-                ],
+                        )
+                        .toList(),
+                    SizedBox(
+                      height: 24 * LayoutConstant.kScaleFactor +
+                          LayoutConstant.kVerticalScreenPadding,
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

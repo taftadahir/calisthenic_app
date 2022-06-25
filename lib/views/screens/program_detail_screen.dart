@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:calisthenic_app/configs/app_theme.dart';
 import 'package:calisthenic_app/constants/layout_constant.dart';
-import 'package:calisthenic_app/controllers/program_controller.dart';
+import 'package:calisthenic_app/controllers/app_controller.dart';
 import 'package:calisthenic_app/views/components/app_bar_component.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,7 +23,7 @@ class ProgramDetailScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),
-      body: GetBuilder(builder: (ProgramController controller) {
+      body: GetBuilder(builder: (AppController appController) {
         return SingleChildScrollView(
           physics: AppTheme.kPhysics,
           padding: EdgeInsets.symmetric(
@@ -33,7 +33,7 @@ class ProgramDetailScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              controller.programImages!.isEmpty
+              appController.images!.isEmpty
                   ? const SizedBox(height: 0)
                   : SizedBox(
                       height: Get.width -
@@ -41,13 +41,13 @@ class ProgramDetailScreen extends StatelessWidget {
                       child: PageView.builder(
                         controller: pageController,
                         physics: AppTheme.kPhysics,
-                        itemCount: controller.programImages?.length,
+                        itemCount: appController.images?.length,
                         onPageChanged: (index) {
-                          controller.activeProgramImage = index;
+                          appController.activeImageIndex = index;
                         },
                         itemBuilder: (context, index) {
                           return Image.asset(
-                            'assets/images/${controller.programImages![controller.activeProgramImage]}',
+                            'assets/images/${appController.images![appController.activeImageIndex]}',
                           );
                         },
                       ),
@@ -62,19 +62,19 @@ class ProgramDetailScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    controller.programImages?.length ?? 0,
+                    appController.images?.length ?? 0,
                     (index) => AnimatedContainer(
                       duration: AppTheme.animationDuration,
-                      height: index == controller.activeProgramImage
+                      height: index == appController.activeImageIndex
                           ? LayoutConstant.kActiveDotSize
                           : LayoutConstant.kInactiveDotSize,
-                      width: index == controller.activeProgramImage
+                      width: index == appController.activeImageIndex
                           ? LayoutConstant.kActiveDotSize
                           : LayoutConstant.kInactiveDotSize,
                       margin: EdgeInsets.symmetric(
                           horizontal: 4.0 * LayoutConstant.kScaleFactor),
                       decoration: BoxDecoration(
-                        color: index == controller.activeProgramImage
+                        color: index == appController.activeImageIndex
                             ? context.theme.primaryColor
                             : context.theme.cardColor,
                       ),
@@ -83,7 +83,7 @@ class ProgramDetailScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                controller.program!.name,
+                appController.program!.name,
                 style: context.theme.textTheme.titleLarge,
               ),
               SizedBox(
@@ -97,7 +97,7 @@ class ProgramDetailScreen extends StatelessWidget {
                 height: LayoutConstant.kSpaceBetweenElements,
               ),
               Text(
-                controller.program!.description ?? '---',
+                appController.program!.description ?? '---',
                 style: context.theme.textTheme.bodySmall,
               ),
               SizedBox(
@@ -111,7 +111,7 @@ class ProgramDetailScreen extends StatelessWidget {
                 height: LayoutConstant.kSpaceBetweenElements,
               ),
               Text(
-                controller.program!.tips ?? '---',
+                appController.program!.tips ?? '---',
                 style: context.theme.textTheme.bodySmall,
               ),
               SizedBox(
